@@ -10,6 +10,8 @@ _wandb
 **/.DS_Store
 
 fuse.cfg
+*.tar.gz
+
 
 *.ai
 
