@@ -107,7 +107,7 @@ class CobotRealPushCubemageDataset(BaseImageDataset):
 
         # action
         normalizer['action'] = SingleFieldLinearNormalizer.create_fit(
-            self.replay_buffer['actions'])
+            self.replay_buffer['action_2d'])
         
         # obs
         for key in self.lowdim_keys:
@@ -120,7 +120,7 @@ class CobotRealPushCubemageDataset(BaseImageDataset):
         return normalizer
 
     def get_all_actions(self) -> torch.Tensor:
-        return torch.from_numpy(self.replay_buffer['actions'])
+        return torch.from_numpy(self.replay_buffer['action_2d'])
 
     def __len__(self):
         return len(self.sampler)
@@ -142,7 +142,7 @@ class CobotRealPushCubemageDataset(BaseImageDataset):
             
             # if obs shape not equal to the shape in shape_meta, resize
             if obs_shape != obs_dict[key].shape[1:]:  # Compare without batch dim
-                print(f"Resizing {key} from {obs_dict[key].shape[1:]} to {obs_shape}")
+                # print(f"Resizing {key} from {obs_dict[key].shape[1:]} to {obs_shape}")
                 # Reshape each image in the sequence
                 resized = []
                 for t in range(obs_dict[key].shape[0]):
@@ -162,7 +162,7 @@ class CobotRealPushCubemageDataset(BaseImageDataset):
             # save ram
             del data[key]
         
-        action = data['actions'][:,:2].astype(np.float32)
+        action = data['action_2d'].astype(np.float32)
         # handle latency by dropping first n_latency_steps action
         # observations are already taken care of by T_slice
         if self.n_latency_steps > 0:
@@ -186,7 +186,7 @@ def test():
 
     from matplotlib import pyplot as plt
     normalizer = dataset.get_normalizer()
-    nactions = normalizer['action'].normalize(dataset.replay_buffer['actions'][:])
+    nactions = normalizer['action'].normalize(dataset.replay_buffer['action_2d'][:])
     diff = np.diff(nactions, axis=0)
     dists = np.linalg.norm(np.diff(nactions, axis=0), axis=-1)
     _ = plt.hist(dists, bins=100); plt.title('real action velocity')

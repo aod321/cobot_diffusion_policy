@@ -1,7 +1,7 @@
 name: cobot_real_image
 
 image_shape: [3, 240, 320]
-dataset_path: /beegfs_hdd/data/nfs_share/share/share_datas/cobot_push_cube_dataset_collecting/training_data/push_cube_2025-01-16-jls
+dataset_path: /nvmessd/yinzi/push_cube_2025-01-16-jls
 
 shape_meta: &shape_meta
   # acceptable types: rgb, low_dim
@@ -22,7 +22,7 @@ shape_meta: &shape_meta
     #   shape: ${task.image_shape}
     #   type: rgb
     robot_eef_pose:
-      shape: [2]
+      shape: [6]
       type: low_dim
   action: 
     shape: [2] 
